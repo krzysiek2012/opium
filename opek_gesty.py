@@ -2,7 +2,7 @@ import os
 import unittest
 from appium import webdriver
 from time import sleep
-
+#ten plik jest skopiowany z poprzedniej wersji czyli opek
 
 PATH = lambda p: os.path.abspath(
     os.path.join(os.path.dirname(__file__),p)
@@ -41,38 +41,7 @@ class TestingApp(unittest.TestCase):
         # w webowce nie ma content desc
         #
         self.driver.is_app_installed('io.appium.android.apis')
-        self.driver.find_element_by_accessibility_id('Graphics').click()
-        self.driver.find_element_by_accessibility_id('Arcs').click()
-        header_element = self.driver.find_element_by_id('android:id/action_bar_title')
-        HeaderText = header_element.text
-        self.assertIsNotNone(header_element)
-        #jak by nie dzialo to to na dysku screen 4, jest inna opcja
-        print(f"naglowek to: {HeaderText}")
-        #self.driver.keyevent(4)
 
-        #keyevent appium android, powinna sie pojawic cala lista tych przyciskow, domyslnie w
-        #telefonie (4) to klawisz back i stad ta funkcja..https://developer.android.com/reference/android/view/KeyEvent#KEYCODE_BACK
-        #creen shot np mozna w apium napisac albo klawisz (120), trzeba sprawdzi
-        #takeing screen shot with Appium -> robi sie w telefonie
-        #self.driver.keyevent(120)
-        self.driver.back()
-        self.driver.keyevent(4)
-
-        app_button = self.driver.find_element_by_accessibility_id('App')
-        #moje, nie sprawdzilem
-        #if app_button.is_displayed():
-            #print(f'guzik app jest wyswietlony')
-        sleep(1)
-        self.assertIsNotNone(app_button)
-
-        ile_wszys = self.driver.find_elements_by_id('android:id/text1')
-        #trzeba policzyc ile zakladek
-        #moje, trzeba dopracowac
-        #for x in ile_wszys:
-            #print(f'wlasnie to znalazlem{x}')
-        total = len(ile_wszys)
-        print(f'liczba to: {total}')
-        #pan cojeszcze z ifem wrzucil, sprawdz se na screenach  od 5..
 
 
 if __name__ == '__main__':
