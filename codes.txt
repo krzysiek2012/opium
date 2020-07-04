@@ -272,3 +272,93 @@ Prawidłowe zliczenie ilości zakładek.
 
 
 http://www.automationtestinghub.com/apppackage-and-appactivity-name/
+
+
+find_category_elements = self.driver.find_elements_by_id('android:id/text1')
+total_categories = len(find_category_elements)
+print("Liczba zakladek wynosi :"+total_categories)
+
+
+
+
+
+ROZW:
+import os
+import unittest
+from appium import webdriver
+from time import sleep
+
+
+PATH = lambda p: os.path.abspath(
+    os.path.join(os.path.dirname(__file__),p)
+)
+
+class TestingApp(unittest.TestCase):
+    def setUp(self):
+        desired_caps = {}
+        desired_caps['platformName'] = 'Android'
+        # desired_caps['platformVersion'] = '8.0'
+        desired_caps['deviceName'] = 'Genymotion Cloud'
+        desired_caps['app'] = PATH('ApiDemos-debug.apk')
+        desired_caps['udid'] = 'localhost:44663' #do uzupelnienia
+        desired_caps['appPackage'] = 'io.appium.android.apis'
+        desired_caps['appActivity'] = 'io.appium.android.apis.ApiDemos'
+
+        # connect to Appium
+        self.driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+
+    def tearDown(self):
+        self.driver.quit()
+
+    def test_simple_actions(self):
+        self.driver.is_app_installed('io.appium.android.apis')
+        self.driver.find_element_by_accessibility_id('Graphics').click()
+        self.driver.find_element_by_accessibility_id('Arcs').click()
+
+        # headerElement = self.driver.find_element_by_id('android:id/action_bar')
+        # headerText = headerElement.text
+
+        headerElement = self.driver.find_element_by_android_uiautomator('new UiSelector().textContains("Graphics/Arcs")')
+        headerText = headerElement.text
+
+        self.assertIsNotNone(headerElement)
+        print("Naglowek to: "+headerText)
+
+        self.driver.back()
+        self.driver.keyevent(4)
+        # self.driver.keyevent(120) # taking screenshot using keyevents
+
+        element = self.driver.find_element_by_accessibility_id('App')
+        sleep(1)
+        self.assertIsNotNone(element)
+        print(element.text)
+
+        find_category_elements = self.driver.find_elements_by_id('android:id/text1')
+        # elements = self.driver.find_elements_by_android_uiautomator("new UiSelector().enabled(true)")
+        total_categories = len(find_category_elements)
+        print("Liczba zakladek wynosi :" + total_categories.__str__())
+        self.assertGreater(total_categories,10)
+
+
+if __name__ == '__main__':
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestingApp)
+    unittest.TextTestRunner(verbosity=2).run(suite)
+
+
+
+
+TC4 - akcje dotykowe (TOUCHACTIONS)
+
+Apka: API DEMOS
+
+Kroki:
+1. Wejdź do „Views”
+2. Wejdź do „Expandable list”
+3. Wejdź do „Custom Adapter”
+4. Długo przytrzymaj na „People names”
+5. Kliknij na „Sample action”
+
+Oczekiwane rezultaty:
+Poprawne wybranie pola „Sample action”.
+
+
