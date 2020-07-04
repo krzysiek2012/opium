@@ -15,11 +15,12 @@ class TestingApp(unittest.TestCase):
         # desired_caps['platformVersion'] = '8.0'
         desired_caps['deviceName'] = 'Krzysztof (Galaxy A5)'
         desired_caps['app'] = PATH('ApiDemos-debug.apk')
-        desired_caps['udid'] = 'localhost:fb66d463' #do uzupelnienia
-        desired_caps['appPackage'] = 'com.example.android.contactmanager'#tutorial poniej przypadku testowego na code shale
+        desired_caps['udid'] = 'fb66d463' #do uzupelnienia
+        desired_caps['appPackage'] = 'io.appium.android.apis'#tutorial poniej przypadku testowego na code shale
         #http://www.automationtestinghub.com/apppackage-and-appactivity-name/
         #metoda pierwsza
-        desired_caps['appActivity'] = 'com.example.android.contactmanager.ContactManager'
+
+        desired_caps['appActivity'] = 'io.appium.android.apis.ApiDemos'
 
         # connect to Appium
         self.driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps) #tutaj apium serwer (chyba)
@@ -28,7 +29,15 @@ class TestingApp(unittest.TestCase):
         self.driver.quit()
 
     def test_simple_action(self):
-        self.assertTrue(True)
+        # tutaj selectory do appium
+        # http://appium.io/docs/en/commands/element/find-elements/
+        # accessbilibity -> content-desc dostepny w android, mozna po tym lokalizowac, dobre, wyjatkowe, moze miec nazwe podobna do TEXT ale to nie znaczy ze cos ten tego, bo inne sa
+        # w webowce nie ma content desc
+        #
+        self.driver.is_app_installed('io.appium.android.apis')
+        self.driver.find_element_by_accessibility_id('Graphics').click()
+        self.driver.find_element_by_accessibility_id('Arcs').click()
+        #header_element = self.driver.find_element_by_id()
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TestingApp)
