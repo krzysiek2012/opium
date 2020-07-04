@@ -1,0 +1,274 @@
+Mobilne testowanie gr2 - 21.06.2020 oraz 4.07.2020
+
+
+
+
+
+
+
+
+Maszyna wirtualna ze skonfigurowanym Appium - ubuntu 18.04:
+
+Pobierz z JEDNEGO z poniższych linków:
+1) https://www.myairbridge.com/en/#!/link/6uVfq2dSv
+2) https://mab.to/6uVfq2dSv
+
+Instalowanie testowych aplikacji iOS mozna zrobic za pomoca narzedzia: diawi.com
+
+LOKALIZOWANIE za pomocą uiautomationviewera
+
+Otwórz ścieżkę /home/tester/Android/Sdk/tools/bin
+i uruchom uiautomationviewer za pomocą polecenia jak niżej:
+./uiautomatorviewer
+
+TESTY:
+
+TC1:
+1. uruchom aplikację ContactManager.apk
+2. dodaj kontakt
+3. zapisz ustawienia dla aplikacji
+
+PATH = lambda p: os.path.abspath(
+    os.path.join(os.path.dirname(__file__),p)
+)
+
+  if __name__ == '__main__':
+      suite = unittest.TestLoader().loadTestsFromTestCase(TestowanieAplikacji)
+      unittest.TextTestRunner(verbosity=2).run(suite)
+
+ WZORZEC - tc1:
+import os
+import unittest
+from appium import webdriver
+from time import sleep
+
+
+PATH = lambda p: os.path.abspath(
+    os.path.join(os.path.dirname(__file__),p)
+)
+
+class TestingApp(unittest.TestCase):
+    def setUp(self):
+        desired_caps = {}
+        desired_caps['platformName'] = 'Android'
+        # desired_caps['platformVersion'] = '8.0'
+        desired_caps['deviceName'] = 'Genymotion Cloud'
+        desired_caps['app'] = PATH('ContactManager.apk')
+        desired_caps['udid'] = 'localhost:39893' #do uzupelnienia
+        desired_caps['appPackage'] = 'com.example.android.contactmanager'
+        desired_caps['appActivity'] = 'com.example.android.contactmanager.ContactManager'
+
+        # connect to Appium
+        self.driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+
+    def tearDown(self):
+        self.driver.quit()
+
+    def test_form_app(self):
+        self.assertTrue(True)
+
+if __name__ == '__main__':
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestingApp)
+    unittest.TextTestRunner(verbosity=2).run(suite)
+
+
+Kolejny etap - TC1:
+import os
+import unittest
+from appium import webdriver
+from time import sleep
+
+
+PATH = lambda p: os.path.abspath(
+    os.path.join(os.path.dirname(__file__),p)
+)
+
+class TestingApp(unittest.TestCase):
+    def setUp(self):
+        desired_caps = {}
+        desired_caps['platformName'] = 'Android'
+        # desired_caps['platformVersion'] = '8.0'
+        desired_caps['deviceName'] = 'Genymotion Cloud'
+        desired_caps['app'] = PATH('ContactManager.apk')
+        desired_caps['udid'] = 'localhost:39893' #do uzupelnienia
+        desired_caps['appPackage'] = 'com.example.android.contactmanager'
+        desired_caps['appActivity'] = 'com.example.android.contactmanager.ContactManager'
+
+        # connect to Appium
+        self.driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+
+    def tearDown(self):
+        self.driver.quit()
+
+    def test_form_app(self):
+        self.driver.is_app_installed('com.example.android.contactmanager')
+
+
+if __name__ == '__main__':
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestingApp)
+    unittest.TextTestRunner(verbosity=2).run(suite)
+
+
+
+
+
+KODY - przykłady:
+
+import os
+import unittest
+from appium import webdriver
+from time import sleep
+
+
+PATH = lambda p: os.path.abspath(
+    os.path.join(os.path.dirname(__file__),p)
+)
+
+class TestingApp(unittest.TestCase):
+    def setUp(self):
+        desired_caps = {}
+        desired_caps['platformName'] = 'Android'
+        # desired_caps['platformVersion'] = '8.0'
+        desired_caps['deviceName'] = 'Genymotion Cloud'
+        desired_caps['app'] = PATH('ContactManager.apk')
+        desired_caps['udid'] = 'localhost:43059' #do uzupelnienia
+        desired_caps['appPackage'] = 'com.example.android.contactmanager'
+        desired_caps['appActivity'] = 'com.example.android.contactmanager.ContactManager'
+
+        # connect to Appium
+        self.driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+
+    def tearDown(self):
+        self.driver.quit()
+
+    def test_form_app(self):
+        self.driver.is_app_installed('com.example.android.contactmanager')
+        self.driver.find_element_by_class_name('android.widget.Button').click()
+        sleep(3)
+        textfields = self.driver.find_elements_by_class_name('android.widget.EditText')
+        textfields[0].send_keys("Ola z Wroclawia")
+        textfields[1].send_keys("555444333")
+        textfields[2].send_keys("ola@wsb.pl")
+        sleep(2)
+
+        self.assertTrue(textfields[0].text,"Ola z Wroclawia")
+        self.assertTrue(textfields[1].text,"555444333")
+        self.assertTrue(textfields[2].text,"ola@wsb.pl")
+
+        self.driver.find_element_by_id('com.example.android.contactmanager:id/contactSaveButton').click()
+
+
+
+if __name__ == '__main__':
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestingApp)
+    unittest.TextTestRunner(verbosity=2).run(suite)
+
+*****
+
+
+
+TC - 2 test zakładki WIFI w aplikacji ApiDemos:
+
+TC2 - testowanie opcji WIFI w aplikacji ApiDemos
+1. Kliknij w zakładkę PREFERENCES
+2. Kliknij w zakładkę "3. Prefence dependencies"
+3. Zaznacz checboxy wszystkie, które są zaznaczalne i je zaznaczyć te, które można
+4. Kliknij w WIFI settings
+5. Wpisz hasło "1234"
+6. Sprawdź poprawność wpisanego hasła oraz tego jest widoczny na ekranie urządzenia
+7. Klinij OK
+8. Kliknij przycisk "back androidowy" dwukrotnie
+
+desired_caps['appPackage'] = 'io.appium.android.apis'
+desired_caps['appActivity'] = 'io.appium.android.apis.ApiDemos'
+
+
+
+TC - rozwiazanie :
+import os
+import unittest
+from appium import webdriver
+from time import sleep
+
+
+PATH = lambda p: os.path.abspath(
+    os.path.join(os.path.dirname(__file__),p)
+)
+
+class TestingApp(unittest.TestCase):
+    def setUp(self):
+        desired_caps = {}
+        desired_caps['platformName'] = 'Android'
+        # desired_caps['platformVersion'] = '8.0'
+        desired_caps['deviceName'] = 'Genymotion Cloud'
+        desired_caps['app'] = PATH('ApiDemos-debug.apk')
+        desired_caps['udid'] = 'localhost:42111' #do uzupelnienia
+        desired_caps['appPackage'] = 'io.appium.android.apis'
+        desired_caps['appActivity'] = 'io.appium.android.apis.ApiDemos'
+
+        # connect to Appium
+        self.driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+
+    def tearDown(self):
+        self.driver.quit()
+
+    def test_wifi_settings(self):
+        #self.driver.is_app_installed('io.appium.android.apis')
+        self.driver.find_element_by_accessibility_id('Preference').click()
+        self.driver.find_element_by_accessibility_id('3. Preference dependencies').click()
+
+        checkboxes = self.driver.find_elements_by_android_uiautomator('new UiSelector().checkable(true)')
+
+        for el in checkboxes:
+            is_checked_value = self.driver.find_element_by_class_name('android.widget.CheckBox').get_attribute("checked")
+
+            if is_checked_value =='true':
+                print('Checkboxy sa zaznaczone')
+            else:
+                el.click()
+
+                passwordInput = "1234"
+
+                self.driver.find_element_by_xpath("//*[@text='WiFi settings']").click()
+                self.driver.find_element_by_class_name("android.widget.EditText").send_keys(passwordInput)
+
+                passwordCurrent = self.driver.find_element_by_class_name("android.widget.EditText").get_attribute("text")
+
+                self.assertEqual(passwordInput,passwordCurrent)
+
+                self.driver.find_element_by_id("android:id/button1").click()
+
+                self.driver.back()
+                self.driver.keyevent(4)
+
+
+
+if __name__ == '__main__':
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestingApp)
+    unittest.TextTestRunner(verbosity=2).run(suite)
+
+*** zajecia 4.07 ***
+
+TC3 - simple actions
+
+app: API DEMOS
+
+Kroki:
+1. Wejdź do „Graphics”
+2. Wejdź do „Arcs”
+3. Sprawdź czy nagłówek istnieje
+4. Sprawdź jaka jest jego treść
+
+Oczekiwane rezultaty:
+Prawidłowe wyświetlenie treści nagłówka.
+
+5. Wróć do okna głównego apki
+6. Sprawdź czy istnieje „App”
+7. Sprawdź ile jest zakładek
+8. Sprawdź czy zakładek jest powyżej 10
+
+Oczekiwane rezultaty:
+Prawidłowe zliczenie ilości zakładek.
+
+
+http://www.automationtestinghub.com/apppackage-and-appactivity-name/

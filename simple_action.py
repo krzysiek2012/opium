@@ -16,9 +16,13 @@ class TestingApp(unittest.TestCase):
         desired_caps['deviceName'] = 'Krzysztof (Galaxy A5)'
         desired_caps['app'] = PATH('ApiDemos-debug.apk')
         desired_caps['udid'] = 'fb66d463' #do uzupelnienia
+        #https://stackoverflow.com/questions/23081263/adb-android-device-unauthorized
+        # tutaj znalazlem jak podlaczyc telefon, nie bylo latwo, trzebabylo parerazy zeby bulo po
+        # $adb devices -> autorized
         desired_caps['appPackage'] = 'io.appium.android.apis'#tutorial poniej przypadku testowego na code shale
         #http://www.automationtestinghub.com/apppackage-and-appactivity-name/
         #metoda pierwsza
+        #aczkolwiek zadzialalo dopiero jak znalazlem na stack overflow
 
         desired_caps['appActivity'] = 'io.appium.android.apis.ApiDemos'
 
@@ -31,7 +35,8 @@ class TestingApp(unittest.TestCase):
     def test_simple_action(self):
         # tutaj selectory do appium
         # http://appium.io/docs/en/commands/element/find-elements/
-        # accessbilibity -> content-desc dostepny w android, mozna po tym lokalizowac, dobre, wyjatkowe, moze miec nazwe podobna do TEXT ale to nie znaczy ze cos ten tego, bo inne sa
+        # accessbilibity -> content-desc dostepny w android, mozna po tym lokalizowac, dobre,
+        # wyjatkowe, moze miec nazwe podobna do TEXT ale to nie znaczy ze cos ten tego, bo inne sa
         # w webowce nie ma content desc
         #
         self.driver.is_app_installed('io.appium.android.apis')
