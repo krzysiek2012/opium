@@ -72,7 +72,7 @@ class TestingApp(unittest.TestCase):
             #print(f'wlasnie to znalazlem{x}')
         total = len(ile_wszys)
         print(f'liczba to: {total}')
-        #pan cojeszcze z ifem wrzucil, sprawdz se na screenach  od 5..
+        #pan cos jeszcze z ifem wrzucil, sprawdz se na screenach  od 5..
 
 
 if __name__ == '__main__':
